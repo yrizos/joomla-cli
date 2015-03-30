@@ -1,7 +1,6 @@
 Simple CLI tool to manage Joomla installations.
 
-Archive
-===
+### Archive
 
 `jcli archive`
 
@@ -11,8 +10,7 @@ Zip all files in the project, excluding temporary directories (`logs`, `tmp`, `c
 
 Same as above, but will also include a dump of the database (needs `mysqldump`).
  
-Config
-===
+### Config
 
 `jcli config`
 
