@@ -30,7 +30,7 @@ class Archive extends Command
         }
 
         $output->writeln('<info>Scanning files</info>');
-        $files = $this->getFiles();
+        $files = $this->getJoomlaFiles();
 
         $output->writeln("<info>Archiving files</info>");
 
@@ -42,10 +42,12 @@ class Archive extends Command
         $progress->display();
 
         foreach ($files as $file) {
-            $realpath  = $file->getRealPath();
-            $localname = str_replace(getcwd() . DIRECTORY_SEPARATOR, '', $realpath);
+            if (!$file->isDir()) {
+                $realpath  = $file->getRealPath();
+                $localname = str_replace(getcwd() . DIRECTORY_SEPARATOR, '', $realpath);
 
-            $zip->addFile($realpath, $localname);
+                $zip->addFile($realpath, $localname);
+            }
 
             $progress->advance();
         }
@@ -62,41 +64,5 @@ class Archive extends Command
 
     }
 
-    protected function getFiles()
-    {
-        $dir      = getcwd();
-        $iterator = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($dir, \RecursiveDirectoryIterator::SKIP_DOTS), \RecursiveIteratorIterator::CHILD_FIRST);
-        $files    = iterator_to_array($iterator);
-
-        $ignore   = [
-            $this->config->log_path,
-            $this->config->tmp_path,
-            getcwd() . '/cache',
-            getcwd() . '/administrator/cache',
-        ];
-        $ignore   = array_map(function ($path) { return realpath($path); }, $ignore);
-        $ignore   = array_filter($ignore, function ($path) { return $path; });
-        $ignore[] = DIRECTORY_SEPARATOR . '.git' . DIRECTORY_SEPARATOR;
-        $ignore[] = DIRECTORY_SEPARATOR . '.idea' . DIRECTORY_SEPARATOR;
-        $ignore[] = DIRECTORY_SEPARATOR . '.berk' . DIRECTORY_SEPARATOR;
-
-        $files = array_filter($files, function ($file) use ($ignore) {
-            if ($file->isDir()) return false;
-
-            $realpath = $file->getRealPath();
-            foreach ($ignore as $path) {
-                if (strpos($realpath, $path) !== false) return false;
-            }
-
-            $basename = $file->getBasename();
-            if (in_array($basename, ['.DS_Store', 'Thumbs.db'])) return false;
-            if (preg_match('/' . $this->name . '-\d{4}-\d{2}-\d{2}-\d+.zip/', $basename)) return false;
-            if (preg_match('/' . $this->config->db . '-\d{4}-\d{2}-\d{2}-\d+.sql/', $basename)) return false;
-
-            return true;
-        });
-
-        return $files;
-    }
 
 }

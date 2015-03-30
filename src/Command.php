@@ -52,4 +52,59 @@ abstract class Command extends SymfonyCommand
 
         return realpath($path);
     }
+
+    protected function getAllFiles()
+    {
+        $dir      = getcwd();
+        $iterator = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($dir, \RecursiveDirectoryIterator::SKIP_DOTS), \RecursiveIteratorIterator::CHILD_FIRST);
+        $files    = iterator_to_array($iterator);
+        $ignore   = ['.git', '.idea', '.berk'];
+
+        return array_filter($files, function ($file) use ($ignore) {
+            $realpath = $file->getRealPath();
+
+            foreach ($ignore as $value) {
+                if (strpos($realpath, DIRECTORY_SEPARATOR . $value . DIRECTORY_SEPARATOR) !== false) return false;
+
+                if ($file->isDir()) {
+                    $realpath = explode(DIRECTORY_SEPARATOR, $realpath);
+                    $realpath = array_pop($realpath);
+
+                    if ($realpath == $value) return false;
+                }
+            }
+
+            return true;
+        });
+    }
+
+    protected function getJoomlaFiles()
+    {
+        $files  = $this->getAllFiles();
+        $ignore = [
+            $this->config->log_path,
+            $this->config->tmp_path,
+            getcwd() . '/cache',
+            getcwd() . '/administrator/cache',
+        ];
+
+        $ignore = array_map(function ($path) { return realpath($path); }, $ignore);
+        $ignore = array_filter($ignore, function ($path) { return $path; });
+
+        return array_filter($files, function ($file) use ($ignore) {
+            if ($file->isDir()) return true;
+
+            $realpath = $file->getRealPath();
+            foreach ($ignore as $path) {
+                if (strpos($realpath, $path) !== false) return false;
+            }
+
+            $basename = $file->getBasename();
+            if (in_array($basename, ['.DS_Store', 'Thumbs.db'])) return false;
+            if (preg_match('/' . $this->name . '-\d{4}-\d{2}-\d{2}-\d+.zip/', $basename)) return false;
+            if (preg_match('/' . $this->config->db . '-\d{4}-\d{2}-\d{2}-\d+.sql/', $basename)) return false;
+
+            return true;
+        });
+    }
 }
