@@ -4,6 +4,7 @@ namespace JCli;
 
 use JCli\Command\Archive;
 use JCli\Command\Configuration;
+use JCli\Command\Database;
 use Symfony\Component\Console\Application as SymfonyApplication;
 
 class Application extends SymfonyApplication
@@ -17,5 +18,6 @@ class Application extends SymfonyApplication
 
         $this->add(new Archive());
         $this->add(new Configuration());
+        $this->add(new Database());
     }
 }

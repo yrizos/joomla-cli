@@ -4,10 +4,10 @@ namespace JCli\Command;
 
 use JCli\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
+use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Question\Question;
 
 class Archive extends Command
 {
@@ -25,8 +25,16 @@ class Archive extends Command
         $db_path = false;
 
         if ($db) {
-            $output->writeln('<info>Exporting database</info>');
-            $db_path = $this->exportDatabase();
+            $db_path = $this->config->db . '-' . date('Y-m-d') . '-' . time() . '.sql';
+
+            $command   = new Database();
+            $arguments = [
+                '--export' => $db_path
+            ];
+            $arguments = new ArrayInput($arguments);
+            $command->run($arguments, $output);
+
+            $db_path = realpath($db_path);
         }
 
         $output->writeln('<info>Scanning files</info>');

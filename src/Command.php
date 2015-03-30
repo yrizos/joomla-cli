@@ -29,30 +29,6 @@ abstract class Command extends SymfonyCommand
         $this->name = array_pop($name);
     }
 
-    protected function exportDatabase()
-    {
-
-        $path = $this->config->db . '-' . date('Y-m-d') . '-' . time() . '.sql';
-
-        $cmd   = [];
-        $cmd[] = 'mysqldump';
-        $cmd[] = '--user=' . escapeshellarg($this->config->user);
-        $cmd[] = '--password=' . escapeshellarg($this->config->password);
-        $cmd[] = '--add-drop-table';
-        $cmd[] = '--extended-insert';
-        $cmd[] = '--compact';
-        $cmd[] = $this->config->db;
-        $cmd[] = '>';
-        $cmd[] = escapeshellarg($path);
-        $cmd   = implode(' ', $cmd);
-
-        exec($cmd, $output, $code);
-
-        if ($code !== 0) throw new \RuntimeException('mysqldump failed.');
-
-        return realpath($path);
-    }
-
     protected function getAllFiles()
     {
         $dir      = getcwd();
