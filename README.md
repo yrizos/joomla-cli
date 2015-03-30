@@ -8,7 +8,7 @@ Zip all files in the project, excluding temporary directories (`logs`, `tmp`, `c
 
 `jcli archive --db`
 
-Same as above, but will also include a dump of the database (needs `mysqldump`).
+Same as above, but will also include a dump of the database.
  
 ### Database
 
