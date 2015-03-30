@@ -1,0 +1,13 @@
+#!/usr/bin/env php
+<?php
+
+$dir_autoload = ['/../vendor/', '/../../../'];
+
+foreach ($dir_autoload as $dir) {
+    $inc_autoload = __DIR__ . $dir . 'autoload.php';
+    if (is_file($inc_autoload)) require_once $inc_autoload;
+}
+
+$app = new JCli\Application();
+$app->run();
+

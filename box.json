@@ -1,0 +1,16 @@
+{
+  "directories": [
+    "src"
+  ],
+  "finder": [
+    {
+      "name": "*.php",
+      "exclude": ["Tests"],
+      "in": "vendor"
+    }
+  ],
+  "main": "bin/jcli",
+  "output": "jcli.phar",
+  "stub": true,
+  "chmod": "0755"
+}
