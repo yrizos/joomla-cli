@@ -18,7 +18,7 @@ Will dump the database.
 
 `jcli db --import <path>`
 
-Will import the database. If database exists, you'll be given the choice to dump it first.
+Will import the database. If the database exists, you'll be given the choice to dump it first.
  
 ### Config
 
