@@ -29,6 +29,27 @@ abstract class Command extends SymfonyCommand
         $this->name = array_pop($name);
     }
 
+    protected function getTimestamp()
+    {
+        return '-' . date('Y-m-d') . '-' . time();
+    }
+
+    protected function getConnection($use_db = false)
+    {
+        $use_db = $use_db === true;
+        $dsn    = $use_db ? 'dbname' . $this->config->db . ';' : '';
+        $dsn    = 'mysql:' . $dsn . 'host=127.0.0.1';
+
+        try {
+            $dbh = new \PDO($dsn, $this->config->user, $this->config->password);
+            $dbh->query("SET NAMES 'utf8'");
+        } catch (\PDOException $e) {
+            throw new \RuntimeException('Connection failed.');
+        }
+
+        return $dbh;
+    }
+
     protected function getAllFiles()
     {
         $dir      = getcwd();

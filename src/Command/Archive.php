@@ -25,7 +25,7 @@ class Archive extends Command
         $db_path = false;
 
         if ($db) {
-            $db_path = $this->config->db . '-' . date('Y-m-d') . '-' . time() . '.sql';
+            $db_path = $this->config->db . $this->getTimestamp() . '.sql';
 
             $command   = new Database();
             $arguments = [
@@ -42,7 +42,7 @@ class Archive extends Command
 
         $output->writeln("<info>Archiving files</info>");
 
-        $path = getcwd() . DIRECTORY_SEPARATOR . $this->name . '-' . date('Y-m-d') . '-' . time() . '.zip';
+        $path = getcwd() . DIRECTORY_SEPARATOR . $this->name . $this->getTimestamp() . '.zip';
         $zip  = new \ZipArchive();
         if (true !== $zip->open($path, \ZipArchive::CREATE)) throw new \RuntimeException("Can't open {$path}.");
 

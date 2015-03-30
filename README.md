@@ -10,6 +10,16 @@ Zip all files in the project, excluding temporary directories (`logs`, `tmp`, `c
 
 Same as above, but will also include a dump of the database (needs `mysqldump`).
  
+### Database
+
+`jcli db --export <path>`
+
+Will dump the database.
+
+`jcli db --import <path>`
+
+Will import the database. If database exists, you'll be given the choice to dump it first.
+ 
 ### Config
 
 `jcli config`
