@@ -1,3 +1,5 @@
+Simple CLI tool to manage Joomla installations.
+
 Archive
 ===
 

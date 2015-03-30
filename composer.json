@@ -1,8 +1,9 @@
 {
   "name": "yrizos/joomla-cli",
   "homepage": "https://github.com/yrizos/joomla-cli",
+  "description": "Simple CLI tool to manage Joomla installations.",
   "type": "tool",
-  "keywords": ["git"],
+  "keywords": ["joomla"],
   "license": "MIT",
   "authors": [
     {
