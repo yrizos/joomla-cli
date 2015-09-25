@@ -38,7 +38,7 @@ class Archive extends Command
         }
 
         $output->writeln('<info>Scanning files</info>');
-        $files = $this->getJoomlaFiles();
+        $files = $this->getJoomlaFiles($db_path, [getcwd() . '/.private']);
 
         $output->writeln("<info>Archiving files</info>");
 
@@ -59,6 +59,7 @@ class Archive extends Command
 
             $progress->advance();
         }
+
 
         $progress->finish();
         $output->writeln('');

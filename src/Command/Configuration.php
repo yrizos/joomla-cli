@@ -19,13 +19,19 @@ class Configuration extends Command
     public function execute(InputInterface $input, OutputInterface $output)
     {
 
+        $logs_path = !empty($this->config->log_path) ? basename($this->config->log_path) : 'logs';
+        $logs_path = getcwd() . DIRECTORY_SEPARATOR . $logs_path;
+        $tmp_path  = !empty($this->config->tmp_path) ? basename($this->config->tmp_path) : 'tmp';
+        $tmp_path  = getcwd() . DIRECTORY_SEPARATOR . $tmp_path;
+
+
         $variables = [
             'host'     => [$this->config->host, 'Database host'],
             'db'       => [$this->config->db, 'Database name'],
             'user'     => [$this->config->user, 'Database user'],
             'password' => [null, 'Database password'],
-            'log_path' => [$this->config->log_path, 'Logs path'],
-            'tmp_path' => [$this->config->tmp_path, 'Temp path'],
+            'log_path' => [$logs_path, 'Logs path'],
+            'tmp_path' => [$tmp_path, 'Temp path'],
         ];
 
         $replace = [];

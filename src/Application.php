@@ -3,8 +3,11 @@
 namespace JCli;
 
 use JCli\Command\Archive;
+use JCli\Command\Component;
+use JCli\Command\ComponentArchive;
 use JCli\Command\Configuration;
 use JCli\Command\Database;
+use JCli\Command\ExtArchive;
 use Symfony\Component\Console\Application as SymfonyApplication;
 
 class Application extends SymfonyApplication
@@ -19,5 +22,8 @@ class Application extends SymfonyApplication
         $this->add(new Archive());
         $this->add(new Configuration());
         $this->add(new Database());
+//        $this->add(new Component());
+//        $this->add(new ComponentArchive());
+        $this->add(new ExtArchive());
     }
 }

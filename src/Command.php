@@ -75,20 +75,19 @@ abstract class Command extends SymfonyCommand
         });
     }
 
-    protected function getJoomlaFiles()
+    protected function getJoomlaFiles($db = false, array $ignore = [])
     {
-        $files  = $this->getAllFiles();
-        $ignore = [
-            $this->config->log_path,
-            $this->config->tmp_path,
-            getcwd() . '/cache',
-            getcwd() . '/administrator/cache',
-        ];
+        $files    = $this->getAllFiles();
+        $ignore[] = $this->config->log_path;
+        $ignore[] = $this->config->tmp_path;
+        $ignore[] = getcwd() . '/cache';
+        $ignore[] = getcwd() . '/administrator/cache';
 
         $ignore = array_map(function ($path) { return realpath($path); }, $ignore);
         $ignore = array_filter($ignore, function ($path) { return $path; });
+        $ignore = array_unique($ignore);
 
-        return array_filter($files, function ($file) use ($ignore) {
+        return array_filter($files, function ($file) use ($ignore, $db) {
             if ($file->isDir()) return true;
 
             $realpath = $file->getRealPath();
@@ -99,7 +98,7 @@ abstract class Command extends SymfonyCommand
             $basename = $file->getBasename();
             if (in_array($basename, ['.DS_Store', 'Thumbs.db'])) return false;
             if (preg_match('/' . $this->name . '-\d{4}-\d{2}-\d{2}-\d+.zip/', $basename)) return false;
-            if (preg_match('/' . $this->config->db . '-\d{4}-\d{2}-\d{2}-\d+.sql/', $basename)) return false;
+            if (!$db && preg_match('/' . $this->config->db . '-\d{4}-\d{2}-\d{2}-\d+.sql/', $basename)) return false;
 
             return true;
         });
