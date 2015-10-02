@@ -22,8 +22,6 @@ class Application extends SymfonyApplication
         $this->add(new Archive());
         $this->add(new Configuration());
         $this->add(new Database());
-//        $this->add(new Component());
-//        $this->add(new ComponentArchive());
         $this->add(new ExtArchive());
     }
 }

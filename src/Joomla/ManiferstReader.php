@@ -34,11 +34,14 @@ class ManiferstReader
             'administrator/modules',
             'components',
             'modules',
+            'plugins',
         ];
 
         $base_path = realpath($base_path);
         foreach ($paths as $path) {
             $path = realpath($base_path . '/' . $path . '/' . $name);
+
+            echo $path . PHP_EOL;
 
             if ($path) return $path;
         }
